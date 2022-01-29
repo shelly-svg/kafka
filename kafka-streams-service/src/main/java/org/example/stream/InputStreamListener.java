@@ -20,7 +20,7 @@ public class InputStreamListener {
     private final JsonResolver jsonResolver;
 
     @Bean
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     public Function<KStream<String, String>, KStream<String, String>[]> processInputStream() {
         return rawDataStream -> {
             rawDataStream.peek((key, ignoredValue) -> log.trace(RECEIVED_PAYLOAD_MESSAGE + key));
@@ -28,9 +28,8 @@ public class InputStreamListener {
             Predicate<String, String> jsonStream = (key, inputData) -> jsonResolver.isJson(inputData);
             Predicate<String, String> emptyStream = (key, value) -> value.isEmpty() || value.isBlank();
             Predicate<String, String> textStream = (key, rawData) -> true;
-            KStream<String, String>[] branchedStreams = rawDataStream.branch(emptyStream, jsonStream, textStream);
 
-            return branchedStreams;
+            return rawDataStream.branch(emptyStream, jsonStream, textStream);
         };
     }
 
