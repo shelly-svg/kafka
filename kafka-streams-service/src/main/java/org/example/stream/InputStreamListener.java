@@ -1,6 +1,5 @@
 package org.example.stream;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.kstream.KStream;
@@ -9,7 +8,6 @@ import org.example.aggregator.JsonResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 @Slf4j
@@ -23,23 +21,17 @@ public class InputStreamListener {
 
     @Bean
     @SuppressWarnings("all")
-    public Function<KStream<String, String>, KStream<String, ?>[]> processInputStream() {
+    public Function<KStream<String, String>, KStream<String, String>[]> processInputStream() {
         return rawDataStream -> {
             rawDataStream.peek((key, ignoredValue) -> log.trace(RECEIVED_PAYLOAD_MESSAGE + key));
 
             Predicate<String, String> jsonStream = (key, inputData) -> jsonResolver.isJson(inputData);
-            Predicate<String, String> emptyStream =
-                    (key, value) -> Objects.isNull(value) || value.isEmpty() || value.isBlank();
+            Predicate<String, String> emptyStream = (key, value) -> value.isEmpty() || value.isBlank();
             Predicate<String, String> textStream = (key, rawData) -> true;
-            KStream<String, String>[] branchedStreams = rawDataStream.branch(jsonStream, emptyStream, textStream);
+            KStream<String, String>[] branchedStreams = rawDataStream.branch(emptyStream, jsonStream, textStream);
 
-            KStream<String, JsonNode> convertedJsonStream = convertDataInJsonStream(branchedStreams[0]);
-            return new KStream[]{convertedJsonStream, branchedStreams[1], branchedStreams[2]};
+            return branchedStreams;
         };
-    }
-
-    private KStream<String, JsonNode> convertDataInJsonStream(KStream<String, String> jsonStream) {
-        return jsonStream.mapValues(jsonResolver::transform);
     }
 
 }

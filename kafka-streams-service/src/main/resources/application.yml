@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   kafka:
     bootstrap-servers: localhost:9092
@@ -9,11 +12,11 @@ spring:
         processInputStream-in-0:
           destination: input-data
         processInputStream-out-0:
-          destination: json-data
-        processInputStream-out-1:
-          destination: text-data
-        processInputStream-out-2:
           destination: empty-data
+        processInputStream-out-1:
+          destination: json-data
+        processInputStream-out-2:
+          destination: text-data
       kafka:
         streams:
           binder:
@@ -24,7 +27,7 @@ spring:
               commit:
                 inverval: 500
               processing:
-                guarantee: exactly_once_v2
+                guarantee: exactly_once
             functions:
               processInputStream:
                 applicationId: kafkaStreamsServiceAppId
