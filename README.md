@@ -17,4 +17,5 @@ It will create container for kafka-connect with driver for mongodb-sink-connecto
 
 UI tools:
 1. kafka - localhost:8070
-2. postgres - localhost:5050, username test@gmail.com, password - postgres
+2. postgres - localhost:5050, username test@gmail.com, password - postgres;
+connection - host: host.docker.internal, port: 5432, user: postgres, password: postgres
