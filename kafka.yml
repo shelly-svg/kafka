@@ -136,7 +136,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   pg-admin:
-    image: dpage/pgadmin4:6.4
+    image: dpage/pgadmin4:6.8
     container_name: pg-admin
     ports:
       - '5050:80'
