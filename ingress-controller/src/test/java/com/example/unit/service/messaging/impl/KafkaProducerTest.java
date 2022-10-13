@@ -1,7 +1,7 @@
 package com.example.unit.service.messaging.impl;
 
 import com.example.constant.TestConstants;
-import com.example.integration.reader.JsonFileReader;
+import com.example.reader.JsonFileReader;
 import com.example.service.messaging.Producer;
 import com.example.service.messaging.impl.KafkaProducer;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -2,6 +2,8 @@ package com.example.integration.config;
 
 import com.example.constant.TestConstants;
 import com.example.integration.consumer.KafkaListener;
+import com.example.reader.JsonFileReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,7 +18,7 @@ import java.util.Set;
 
 @TestConfiguration
 @RequiredArgsConstructor
-public class ListenerConfig {
+public class TestConfig {
 
     private final Environment environment;
 
@@ -41,6 +43,11 @@ public class ListenerConfig {
         consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, TestConstants.CONSUMER_GROUP_ID);
         consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return consumerProperties;
+    }
+
+    @Bean
+    protected JsonFileReader fileReader(ObjectMapper objectMapper) {
+        return new JsonFileReader(objectMapper);
     }
 
 }

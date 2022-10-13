@@ -1,7 +1,7 @@
 package com.example.unit.service.impl;
 
 import com.example.constant.TestConstants;
-import com.example.integration.reader.JsonFileReader;
+import com.example.reader.JsonFileReader;
 import com.example.service.ConsumingService;
 import com.example.service.impl.UserConsumingService;
 import com.example.service.messaging.Producer;

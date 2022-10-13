@@ -2,10 +2,10 @@ package com.example.integration;
 
 import com.example.constant.TestConstants;
 import com.example.controller.UserController;
-import com.example.integration.config.ListenerConfig;
+import com.example.integration.config.TestConfig;
 import com.example.integration.consumer.KafkaListener;
 import com.example.integration.extension.KafkaExtension;
-import com.example.integration.reader.JsonFileReader;
+import com.example.reader.JsonFileReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
-@Import(ListenerConfig.class)
+@Import(TestConfig.class)
 @ExtendWith(KafkaExtension.class)
 @SpringBootTest
 class IngressControllerTest {

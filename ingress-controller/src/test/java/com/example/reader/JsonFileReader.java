@@ -1,13 +1,11 @@
-package com.example.integration.reader;
+package com.example.reader;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
 @RequiredArgsConstructor
 public class JsonFileReader {
 
