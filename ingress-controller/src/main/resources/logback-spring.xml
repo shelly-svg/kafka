@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <logger name="com.example.service" level="TRACE"/>
+
+  <appender name="console"
+    class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}.%M %L): %msg%n%throwable
+      </Pattern>
+    </layout>
+  </appender>
+
+  <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/opt/log/mapping-extractor</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>/opt/log/mapping-extractor.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+      <!-- keep 10 days' worth of history capped at 100MB total size, max file size is 10MB -->
+      <maxFileSize>10MB</maxFileSize>>
+      <maxHistory>10</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+
+    <encoder>
+      <Pattern>
+        %d{ISO8601} %-5level [%t] %C{1.}.%M %L: %msg%n%throwable
+      </Pattern>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="console"/>
+    <appender-ref ref="rollingFile"/>
+  </root>
+
+</configuration>

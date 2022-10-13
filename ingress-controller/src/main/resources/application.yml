@@ -1,0 +1,12 @@
+server:
+  port: ${bootstrap-config.app.port}
+
+bootstrap-config:
+  app:
+    port: 8081
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer-client-id: ingress-controller
+    producer-batch-size: 10000
+    topic:
+      target: com-example-users
