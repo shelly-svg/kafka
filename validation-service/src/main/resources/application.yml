@@ -7,10 +7,20 @@ spring:
   cloud:
     stream:
       function:
-        definition: processValidUsersStream
+        definition: processUsersStream;processRetryUsersStream
       bindings:
-        processValidUsersStream-in-0:
+        processUsersStream-in-0:
+          destination: ${bootstrap-config.kafka.topics.users}
+        processUsersStream-out-0:
           destination: ${bootstrap-config.kafka.topics.valid-users}
+        processUsersStream-out-1:
+          destination: ${bootstrap-config.kafka.topics.dlq}
+        processRetryUsersStream-in-0:
+          destination: ${bootstrap-config.kafka.topics.users-retry}
+        processRetryUsersStream-out-0:
+          destination: ${bootstrap-config.kafka.topics.valid-users}
+        processRetryUsersStream-out-1:
+          destination: ${bootstrap-config.kafka.topics.dlq}
       kafka:
         streams:
           binder:
@@ -39,25 +49,35 @@ spring:
                     type:
                       headers: false
             functions:
-              processValidUsersStream:
-                applicationId: PersistenceApplicationId
+              processUsersStream:
+                applicationId: ValidationApplicationId
+              processRetryUsersStream:
+                applicationId: RetryValidationApplicationId
           bindings:
-            processValidUsersStream-in-0:
+            processUsersStream-in-0:
               consumer:
-                concurrency: ${bootstrap-config.kafka.concurrency.valid-users-stream}
+                concurrency: ${bootstrap-config.kafka.concurrency.users-stream}
+                deserializationExceptionHandler: logAndContinue
+            processRetryUsersStream-in-0:
+              consumer:
+                concurrency: ${bootstrap-config.kafka.concurrency.retry-users-stream}
                 deserializationExceptionHandler: logAndContinue
 
 bootstrap-config:
   app:
-    port: 8082
+    port: 8084
   kafka:
     bootstrap-servers: localhost:9092
     max-poll-records: 300
     commit-interval-ms: 1000
     topics:
+      users: com-example-users
+      users-retry: com-example-users-retry
       valid-users: com-example-valid-users
+      dlq: com-example-dlq
     concurrency:
-      valid-users-stream: 10
+      users-stream: 10
+      retry-users-stream: 2
 
 management:
   endpoints:

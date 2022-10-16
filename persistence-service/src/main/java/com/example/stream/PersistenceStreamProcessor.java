@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 public class PersistenceStreamProcessor {
 
     @Bean
-    public Consumer<KStream<String, JsonNode>> processPersistenceStream() {
-        return persistenceStream -> persistenceStream
+    public Consumer<KStream<String, JsonNode>> processValidUsersStream() {
+        return validUsersStream -> validUsersStream
             .peek((key, value) -> log.info("Received new message to persist with key: {}, and value: {}", key, value));
     }
 
