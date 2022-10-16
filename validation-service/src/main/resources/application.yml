@@ -47,9 +47,6 @@ spring:
                   value:
                     default:
                       type: com.fasterxml.jackson.databind.node.ObjectNode
-                  use:
-                    type:
-                      headers: false
             functions:
               processUsersStream:
                 applicationId: ValidationApplicationId
