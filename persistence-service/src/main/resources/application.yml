@@ -23,6 +23,8 @@ spring:
                   ms: ${bootstrap-config.kafka.commit-interval-ms}
               processing:
                 guarantee: exactly_once_v2
+              isolation:
+                level: read_committed
               compression:
                 type: snappy
               default:

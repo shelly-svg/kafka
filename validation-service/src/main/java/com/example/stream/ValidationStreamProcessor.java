@@ -1,14 +1,13 @@
 package com.example.stream;
 
+import com.example.stream.wrapper.SplitStream;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Named;
+import org.apache.kafka.streams.kstream.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.function.Function;
 
 @Slf4j
@@ -27,12 +26,11 @@ public class ValidationStreamProcessor {
                 .peek((key, value) -> log.info("Received new message for validation with key: {}, value: {}", key,
                     value));
 
-            Map<String, KStream<String, JsonNode>> branches = usersStream
-                .split(Named.as("prefix-"))
-                .branch((key, value) -> "John".equals(value.get("FirstName").asText()), Branched.as("matched"))
-                .defaultBranch(Branched.as("not-matched"));
+            Predicate<String, JsonNode> predicate = (key, value) -> "John".equals(value.get("FirstName").asText());
 
-            return new KStream[]{branches.get("prefix-matched"), branches.get("prefix-not-matched")};
+            var splitStream = SplitStream.split(usersStream, predicate);
+
+            return new KStream[]{splitStream.getMatchedStream(), splitStream.getNonMatchedStream()};
         };
     }
 
