@@ -57,7 +57,7 @@ bootstrap-config:
 
 custom-kafka:
   topics:
-    valid-users: com-example-users # com-example-valid-users
+    valid-users: com-example-valid-users
   concurrency:
     persistence-stream: 10
 
