@@ -1,0 +1,75 @@
+server:
+  port: ${bootstrap-config.app.port}
+
+spring:
+  kafka:
+    bootstrap-servers: ${bootstrap-config.kafka.bootstrap-servers}
+  cloud:
+    stream:
+      function:
+        definition: processPersistenceStream
+      bindings:
+        processPersistenceStream-in-0:
+          destination: ${custom-kafka.topics.valid-users}
+      kafka:
+        streams:
+          binder:
+            configuration:
+              max:
+                poll:
+                  records: ${bootstrap-config.kafka.max-poll-records}
+              commit:
+                interval:
+                  ms: ${bootstrap-config.kafka.commit-interval-ms}
+              processing:
+                guarantee: exactly_once_v2
+              compression:
+                type: snappy
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.springframework.kafka.support.serializer.JsonSerde
+              spring:
+                json:
+                  value:
+                    default:
+                      type: com.fasterxml.jackson.databind.node.ObjectNode
+                  use:
+                    type:
+                      headers: false
+            functions:
+              processPersistenceStream:
+                applicationId: PersistenceApplicationId
+          bindings:
+            processPersistenceStream-in-0:
+              consumer:
+                concurrency: ${custom-kafka.concurrency.persistence-stream}
+                deserializationExceptionHandler: logAndContinue
+
+bootstrap-config:
+  app:
+    port: 8082
+  kafka:
+    bootstrap-servers: localhost:9092
+    max-poll-records: 300
+    commit-interval-ms: 1000
+
+custom-kafka:
+  topics:
+    valid-users: com-example-users # com-example-valid-users
+  concurrency:
+    persistence-stream: 10
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      cache:
+        time-to-live: 10s
+      show-components: always
