@@ -10,23 +10,25 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class UserConsumingServiceTest {
 
     private final JsonFileReader fileReader = new JsonFileReader(new ObjectMapper());
     private final Producer producer = mock(Producer.class);
-
     private final ConsumingService consumingService = new UserConsumingService(producer);
 
     @Test
     void doConsume_shouldSendPayload_whenCalled() {
+        // GIVEN
         var payload = fileReader.read(TestConstants.PATH_TO_USER);
 
+        // WHEN
         consumingService.doConsume(payload);
 
-        verify(producer).doSend(any(), any(), eq(payload));
+        // THEN
+        then(producer).should().doSend(any(), any(), eq(payload));
     }
 
 }

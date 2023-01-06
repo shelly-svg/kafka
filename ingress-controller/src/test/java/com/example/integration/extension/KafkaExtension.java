@@ -9,13 +9,13 @@ import org.testcontainers.utility.DockerImageName;
 
 public class KafkaExtension implements Extension, BeforeAllCallback, AfterAllCallback {
 
-    private final KafkaContainer kafkaContainer =
-        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.2"));
+    private static final KafkaContainer KAFKA_CONTAINER =
+        new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.1"));
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        kafkaContainer.start();
-        System.setProperty("embedded.kafka.bootstrap-servers", kafkaContainer.getBootstrapServers());
+        KAFKA_CONTAINER.start();
+        System.setProperty("embedded.kafka.bootstrap-servers", KAFKA_CONTAINER.getBootstrapServers());
     }
 
     @Override
