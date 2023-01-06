@@ -26,9 +26,9 @@ public class KafkaConfig {
 
     @Bean
     protected KafkaTemplate<String, JsonNode> kafkaTemplate() {
-        KafkaTemplate<String, JsonNode> template = new KafkaTemplate<>(producerFactory());
-        template.setMessageConverter(new StringJsonMessageConverter());
-        return template;
+        var kafkaTemplate = new KafkaTemplate<>(producerFactory());
+        kafkaTemplate.setMessageConverter(new StringJsonMessageConverter());
+        return kafkaTemplate;
     }
 
     @Bean

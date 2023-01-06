@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.4'
-    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'org.springframework.boot' version '3.0.1'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
     id 'idea'
 }
@@ -13,16 +13,13 @@ repositories {
 }
 
 configurations {
-    all {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
 
 ext {
-    testcontainersVersion = "1.17.1"
+    testcontainersVersion = "1.17.6"
 }
 
 dependencies {
