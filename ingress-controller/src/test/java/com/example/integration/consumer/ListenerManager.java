@@ -16,7 +16,6 @@ public class ListenerManager {
     private static final int POOL_SIZE = 20;
 
     private final List<KafkaListener> kafkaListeners;
-
     private final ExecutorService executorService = Executors.newFixedThreadPool(POOL_SIZE);
 
     @PostConstruct

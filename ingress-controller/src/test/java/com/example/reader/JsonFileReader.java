@@ -14,8 +14,9 @@ public class JsonFileReader {
     public JsonNode read(String path) {
         try (var inputStream = getClass().getClassLoader().getResourceAsStream(path)) {
             return objectMapper.readTree(inputStream);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Can`t read json from the file: " + path);
+        } catch (IOException exception) {
+            throw new IllegalArgumentException(
+                "Can`t read json from the file: " + path + ", reason: " + exception.getMessage());
         }
     }
 

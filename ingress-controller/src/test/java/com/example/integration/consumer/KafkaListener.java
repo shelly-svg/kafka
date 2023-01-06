@@ -14,7 +14,6 @@ public class KafkaListener {
 
     private final KafkaConsumer<String, JsonNode> kafkaConsumer;
     private final int pollIntervalMs;
-
     @Getter
     private final Queue<JsonNode> payloads = new ConcurrentLinkedQueue<>();
 

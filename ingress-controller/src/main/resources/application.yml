@@ -1,9 +1,16 @@
 server:
   port: ${bootstrap-config.app.port}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
 bootstrap-config:
   app:
-    port: 8081
+    port: 8080
   kafka:
     bootstrap-servers: localhost:9092
     producer-client-id: ingress-controller
