@@ -1,13 +1,13 @@
 package com.example.integration.consumer;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 @Component
 @RequiredArgsConstructor

@@ -3,12 +3,9 @@
 
   <logger name="com.example.service" level="TRACE"/>
 
-  <appender name="console"
-    class="ch.qos.logback.core.ConsoleAppender">
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>
-        %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}.%M %L): %msg%n%throwable
-      </Pattern>
+      <pattern>%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C.%M %L): %msg%n%throwable</pattern>
     </layout>
   </appender>
 
@@ -25,13 +22,11 @@
     </rollingPolicy>
 
     <encoder>
-      <Pattern>
-        %d{ISO8601} %-5level [%t] %C{1.}.%M %L: %msg%n%throwable
-      </Pattern>
+      <pattern>%d{ISO8601} %-5level [%t] %C.%M %L: %msg%n%throwable</pattern>
     </encoder>
   </appender>
 
-  <root level="info">
+  <root level="INFO">
     <appender-ref ref="console"/>
     <appender-ref ref="rollingFile"/>
   </root>

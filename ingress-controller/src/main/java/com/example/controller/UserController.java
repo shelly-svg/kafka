@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.service.ConsumingService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,9 +17,8 @@ public class UserController {
     private final ConsumingService userConsumingService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpStatus consume(@RequestBody JsonNode user) {
+    public void consume(@RequestBody JsonNode user) {
         userConsumingService.doConsume(user);
-        return HttpStatus.OK;
     }
 
 }
