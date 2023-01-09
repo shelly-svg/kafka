@@ -1,0 +1,204 @@
+databaseChangeLog:
+  - changeSet:
+      id: create tables
+      author: Denys Tsebro
+      changes:
+        # ###########################
+        # user table structure
+        # ###########################
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_pkey
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createSequence:
+            sequenceName: user_seq
+        # ###########################
+        # role table structure
+        # ###########################
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createSequence:
+            sequenceName: role_seq
+        - addUniqueConstraint:
+            constraintName: role_name_uniq
+            columnNames: name
+            tableName: role
+        # ###########################
+        # user_roles table structure
+        # ###########################
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: role_id
+                  type: BIGINT
+        - addPrimaryKey:
+            constraintName: user_roles_pkey
+            columnNames: user_id, role_id
+            tableName: user_roles
+            clustered: true
+            validate: true
+        - addForeignKeyConstraint:
+            constraintName: user_roles_user_id_fkey
+            baseColumnNames: user_id
+            baseTableName: user_roles
+            referencedColumnNames: id
+            referencedTableName: user
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            deferrable: false
+            initiallyDeferred: false
+            validate: true
+        - addForeignKeyConstraint:
+            constraintName: user_roles_role_id_fkey
+            baseColumnNames: role_id
+            baseTableName: user_roles
+            referencedColumnNames: id
+            referencedTableName: role
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            deferrable: false
+            initiallyDeferred: false
+            validate: true
+        # ###########################
+        # authority table structure
+        # ###########################
+        - createTable:
+            tableName: authority
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: authority_pkey
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createSequence:
+            sequenceName: authority_seq
+        - addUniqueConstraint:
+            constraintName: authority_name_uniq
+            columnNames: name
+            tableName: authority
+        # ###########################
+        # role_authorities table structure
+        # ###########################
+        - createTable:
+            tableName: role_authorities
+            columns:
+              - column:
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  name: authority_id
+                  type: BIGINT
+        - addPrimaryKey:
+            constraintName: role_authorities_pkey
+            columnNames: role_id, authority_id
+            tableName: role_authorities
+            clustered: true
+            validate: true
+        - addForeignKeyConstraint:
+            constraintName: role_authorities_role_id_fkey
+            baseColumnNames: role_id
+            baseTableName: role_authorities
+            referencedColumnNames: id
+            referencedTableName: role
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            deferrable: false
+            initiallyDeferred: false
+            validate: true
+        - addForeignKeyConstraint:
+            constraintName: role_authorities_authority_id_fkey
+            baseColumnNames: authority_id
+            baseTableName: role_authorities
+            referencedColumnNames: id
+            referencedTableName: authority
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            deferrable: false
+            initiallyDeferred: false
+            validate: true
+      rollback:
+        - sql:
+            sql: DROP TABLE user
+        - sql:
+            sql: DROP TABLE role
+        - sql:
+            sql: DROP TABLE user_roles
+        - sql:
+            sql: DROP TABLE authority
+        - sql:
+            sql: DROP TABLE role_authorities

@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert initial data
+      author: Denys Tsebro
+      changes:
+        # ##################################
+        # initial roles
+        # ##################################
+        - sql:
+            sql: INSERT INTO role(id, name, description) VALUES (1, 'ADMIN', 'Admin')
+        - sql:
+            sql: INSERT INTO role(id, name, description) VALUES (2, 'USER', 'User')
+        # ##################################
+        # initial authorities
+        # ##################################
+        - sql:
+            sql: INSERT INTO authority(id, name, description) VALUES (1, 'user.READ', 'Permission to access user APIs with READ rights')
+        - sql:
+            sql: INSERT INTO authority(id, name, description) VALUES (2, 'user.WRITE', 'Permission to access user APIs with WRITE rights')
+        - sql:
+            sql: INSERT INTO authority(id, name, description) VALUES (3, 'client.READ', 'Permission to access client APIs with READ rights')
+        - sql:
+            sql: INSERT INTO authority(id, name, description) VALUES (4, 'client.WRITE', 'Permission to access client APIs with WRITE rights')
+        # ##################################
+        # initial role_authorities
+        # ##################################
+        - sql:
+            sql: INSERT INTO role_authorities(role_id, authority_id) VALUES ((SELECT id FROM role WHERE name = 'ADMIN'),(SELECT id from authority WHERE name = 'user.READ'))
+        - sql:
+            sql: INSERT INTO role_authorities(role_id, authority_id) VALUES ((SELECT id FROM role WHERE name = 'ADMIN'),(SELECT id from authority WHERE name = 'user.WRITE'))
+        - sql:
+            sql: INSERT INTO role_authorities(role_id, authority_id) VALUES ((SELECT id FROM role WHERE name = 'ADMIN'),(SELECT id from authority WHERE name = 'client.READ'))
+        - sql:
+            sql: INSERT INTO role_authorities(role_id, authority_id) VALUES ((SELECT id FROM role WHERE name = 'ADMIN'),(SELECT id from authority WHERE name = 'client.WRITE'))
+      rollback:
+        - sql:
+            sql: DELETE FROM role
+        - sql:
+            sql: DELETE FROM authority
+        - sql:
+            sql: DELETE FROM role_authorities

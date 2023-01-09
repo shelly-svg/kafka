@@ -1,0 +1,56 @@
+jwt:
+  issuer: authentication-service@org.example
+  subject: authentication-service@org.example
+  keyId: authentication-service-key
+  keyType: oct
+  use: sig
+  algorithm: HS256
+  key: IQ09J2BdDuc3lSKUJlQAp8uhCXRq+s2EucsBOb9rfjo= # secret/secret
+
+spring:
+  application:
+    name: authentication-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/auth-service
+    username: postgres
+  jpa:
+    properties:
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: UNSPECIFIED
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        id:
+          new_generator_mappings: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    open-in-view: true
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yml
+
+
+
+server:
+  port: ${bootstrap-config.app.port}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      cache:
+        time-to-live: 10s
+      show-components: always
+
+bootstrap-config:
+  app:
+    port: 8081
